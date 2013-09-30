@@ -60,6 +60,11 @@ Execute R line: C<< attach(d) >>.
 Force the first row to have the row names.
 Execute R line in C<< read.table >>: C<< row.names=1 >>.
 
+=item B<-c>
+
+Force the first column to have the column names.
+Execute R line in C<< read.table >>: C<< header=T >>.
+
 =item B<-e> I<command>
 
 Execute the specified R command after loading the dataset.
@@ -193,6 +198,7 @@ my $plot = $opts{"p"};
 my $keys = $opts{"k"} || "";
 my $sep = $opts{"s"} || "";
 my $row_names = $opts{"r"}; 
+my $header = $opts{"c"}; 
 my $display = $opts{"d"};
 
 # Load up extra arguments
@@ -218,6 +224,9 @@ my $library_commands="";
 my $row_names_command="";
 $row_names_command=", row.names=1" if $row_names;
 
+my $header_command="";
+$header_command=", header=T" if $header;
+
 my $sep_command="";
 $sep_command=", sep='$sep'" if $sep;
 
@@ -230,16 +239,16 @@ if ($file_name=~/^-$/) { # STDIN file
  $table_command = "# This loads the data from STDIN
 rL <- readLines(pipe('cat /dev/stdin'));
 tC <- textConnection(rL);
-d <- read.table(tC $sep_command $row_names_command)";
+d <- read.table(tC $sep_command $row_names_command $header_command)";
 } elsif ($file_name=~/dev\/fd/) {
  # The solution for named pipes seems to be the same as for STDIN?
  $table_command = "# This loads the data from named pipe
 rL <- readLines(pipe('cat $file_name'));
 tC <- textConnection(rL);
-d <- read.table(tC $sep_command $row_names_command)";
+d <- read.table(tC $sep_command $row_names_command $header_command)";
 } else { # Standard file
  die("$0: Dataset '$file_name' does not exist.") unless (-e "$file_name");
- $table_command="d <- read.table('$file_name' $sep_command $row_names_command)";
+ $table_command="d <- read.table('$file_name' $sep_command $row_names_command $header_command)";
 }
 
 my $key_command="";
@@ -305,6 +314,7 @@ The program will execute simple commands in R.
  -k columns that should be taken into account
  -a attach the dataset to the environment
  -r force the first row to contain the row names 
+ -c force the first column to contain the column names 
  -e execute the specified R command after loading the dataset
  -s input record separator (default: white space)
  -p plot the dataset and save it as a pdf file
