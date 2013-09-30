@@ -57,12 +57,12 @@ Execute R line: C<< attach(d) >>.
 
 =item B<-r>
 
-Force the first row to have the row names.
+Force the first column to have the row names.
 Execute R line in C<< read.table >>: C<< row.names=1 >>.
 
 =item B<-c>
 
-Force the first column to have the column names.
+Force the first row to have the column names.
 Execute R line in C<< read.table >>: C<< header=T >>.
 
 =item B<-e> I<command>
@@ -313,8 +313,8 @@ sub usage()
 The program will execute simple commands in R.
  -k columns that should be taken into account
  -a attach the dataset to the environment
- -r force the first row to contain the row names 
- -c force the first column to contain the column names 
+ -r force the first column to contain the row names 
+ -c force the first row to contain the column names 
  -e execute the specified R command after loading the dataset
  -s input record separator (default: white space)
  -p plot the dataset and save it as a pdf file
